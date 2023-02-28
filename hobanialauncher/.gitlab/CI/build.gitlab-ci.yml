@@ -1,13 +1,13 @@
 unittests:
   extends: .recompile-branch
   stage: build
-  image: registry.gitlab.com/veloren/veloren-docker-ci/cache/quality:${CACHE_IMAGE_TAG}
-  tags: ["veloren/*", "check"]
+  image: registry.gitlab.com/hobania/hobania-docker-ci/cache/quality:${CACHE_IMAGE_TAG}
+  tags: ["hobania/*", "check"]
   variables:
     GIT_DEPTH: 9999999999999
   script:
     - ln -s /dockercache/target target
-    - rm -r target/debug/incremental/veloren_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
+    - rm -r target/debug/incremental/hobania_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
     - rm -r target/debug/incremental* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
     - cargo test --all-features
   retry:
@@ -18,10 +18,10 @@ unittests:
 #coverage:
 #  extends: .publish
 #  stage: build
-#  image: registry.gitlab.com/veloren/veloren-docker-ci/cache/tarpaulin:${CACHE_IMAGE_TAG}
+#  image: registry.gitlab.com/hobania/hobania-docker-ci/cache/tarpaulin:${CACHE_IMAGE_TAG}
 #  script:
 #    - ln -s /dockercache/target target
-#    - rm -r target/debug/incremental/veloren_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
+#    - rm -r target/debug/incremental/hobania_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
 #    - find ./* -name "Cargo.toml" -exec sed -i 's/, "simd"]/]/g' {} \;
 #    - find ./* -name "Cargo.toml" -exec sed -i 's/"simd"]/]/g' {} \;
 #    - sed -i 's/vek /#vek /g' ./Cargo.toml;
@@ -31,44 +31,44 @@ unittests:
 
 #linux, windows, macos builds here as template
 .tlinux:
-  image: registry.gitlab.com/veloren/veloren-docker-ci/cache/release-linux-x86_64:${CACHE_IMAGE_TAG}
+  image: registry.gitlab.com/hobania/hobania-docker-ci/cache/release-linux-x86_64:${CACHE_IMAGE_TAG}
   script:
     - ln -s /dockercache/target target
-    - rm -r target/release/incremental/veloren_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
-    - cargo build --release -p airshipper --all-features
-    - cargo build --release -p airshipper-server --all-features
-    - cp -r target/release/airshipper $CI_PROJECT_DIR
-    - cp -r target/release/airshipper-server $CI_PROJECT_DIR
+    - rm -r target/release/incremental/hobania_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
+    - cargo build --release -p Hobanialauncher --all-features
+    - cargo build --release -p Hobanialauncher-server --all-features
+    - cp -r target/release/Hobanialauncher $CI_PROJECT_DIR
+    - cp -r target/release/Hobanialauncher-server $CI_PROJECT_DIR
   artifacts:
     paths:
-      - airshipper
-      - airshipper-server
+      - Hobanialauncher
+      - Hobanialauncher-server
       - LICENSE
     expire_in: 1 week
 
 .twindows:
-  image: registry.gitlab.com/veloren/veloren-docker-ci/cache/release-windows-x86_64:${CACHE_IMAGE_TAG}
+  image: registry.gitlab.com/hobania/hobania-docker-ci/cache/release-windows-x86_64:${CACHE_IMAGE_TAG}
   script:
     - cargo install cargo-wix --version 0.3.0
     - update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
     - update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
     - ln -s /dockercache/target target
-    - rm -r target/release/incremental/veloren_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
-    - cargo build --target=x86_64-pc-windows-gnu --release -p airshipper --all-features
-    - cargo build --target=x86_64-pc-windows-gnu --release -p airshipper-server --all-features
+    - rm -r target/release/incremental/hobania_* || echo "all good" # TMP FIX FOR 2021-03-22-nightly
+    - cargo build --target=x86_64-pc-windows-gnu --release -p Hobanialauncher --all-features
+    - cargo build --target=x86_64-pc-windows-gnu --release -p Hobanialauncher-server --all-features
     # skip windows installer for now on gitlab
     #- cargo wix client/Cargo.toml -o ./target/wix/ --nocapture --no-build
-    #- cp -r target/wix/airshipper-*-x86_64.msi $CI_PROJECT_DIR/airshipper-windows.msi
-    - cp -r target/x86_64-pc-windows-gnu/release/airshipper.exe $CI_PROJECT_DIR
-    - cp -r target/x86_64-pc-windows-gnu/release/airshipper-server.exe $CI_PROJECT_DIR
+    #- cp -r target/wix/Hobanialauncher-*-x86_64.msi $CI_PROJECT_DIR/Hobanialauncher-windows.msi
+    - cp -r target/x86_64-pc-windows-gnu/release/Hobanialauncher.exe $CI_PROJECT_DIR
+    - cp -r target/x86_64-pc-windows-gnu/release/Hobanialauncher-server.exe $CI_PROJECT_DIR
     - cp /usr/lib/gcc/x86_64-w64-mingw32/7.3-posix/libgcc_s_seh-1.dll $CI_PROJECT_DIR
     - cp /usr/lib/gcc/x86_64-w64-mingw32/7.3-posix/libstdc++-6.dll $CI_PROJECT_DIR
     - cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll $CI_PROJECT_DIR
   artifacts:
     paths:
-      #- airshipper-windows.msi
-      - airshipper.exe
-      - airshipper-server.exe
+      #- Hobanialauncher-windows.msi
+      - Hobanialauncher.exe
+      - Hobanialauncher-server.exe
       - LICENSE
       - libgcc_s_seh-1.dll
       - libstdc++-6.dll
@@ -76,7 +76,7 @@ unittests:
     expire_in: 1 week
 
 .tmacos:
-  tags: ["veloren-macos"]
+  tags: ["hobania-macos"]
   before_script:
     - source $HOME/.cargo/env
     - cargo --version
@@ -84,14 +84,14 @@ unittests:
     - export RUSTFLAGS="-D warnings"
   script:
     - export MACOSX_DEPLOYMENT_TARGET="10.13"
-    - cargo build --release -p airshipper --all-features
-    - cargo build --release -p airshipper-server --all-features
-    - cp -r target/release/airshipper $CI_PROJECT_DIR
-    - cp -r target/release/airshipper-server $CI_PROJECT_DIR
+    - cargo build --release -p Hobanialauncher --all-features
+    - cargo build --release -p Hobanialauncher-server --all-features
+    - cp -r target/release/Hobanialauncher $CI_PROJECT_DIR
+    - cp -r target/release/Hobanialauncher-server $CI_PROJECT_DIR
   artifacts:
     paths:
-      - airshipper
-      - airshipper-server
+      - Hobanialauncher
+      - Hobanialauncher-server
       - LICENSE
     expire_in: 1 week
 
@@ -120,39 +120,39 @@ linux:
   extends:
     - .tlinux
     - .release
-  tags: ["veloren/*", "build", "publish", "trusted"]
+  tags: ["hobania/*", "build", "publish", "trusted"]
 
 windows:
   extends:
     - .twindows
     - .release
-  tags: ["veloren/*", "build", "publish", "trusted"]
+  tags: ["hobania/*", "build", "publish", "trusted"]
 
 macos-x86_64:
   extends:
     - .tmacos
     - .release
     - .tmacos-master-cache
-  tags: ["veloren/*:macos", "build", "publish", "trusted"]
+  tags: ["hobania/*:macos", "build", "publish", "trusted"]
 
 macos-aarch64:
   extends:
     - .tmacos-aarch64
     - .release
-  tags: ["veloren/*:macos", "build", "publish", "trusted"]
+  tags: ["hobania/*:macos", "build", "publish", "trusted"]
 
 # if NOT release or master, allow optional builds
 opt-linux:
   extends:
     - .tlinux
     - .optional-release
-  tags: ["veloren/*", "build"]
+  tags: ["hobania/*", "build"]
 
 opt-windows:
   extends:
     - .twindows
     - .optional-release
-  tags: ["veloren/*", "build"]
+  tags: ["hobania/*", "build"]
 
 opt-macos-x86_64:
   extends:
@@ -160,10 +160,10 @@ opt-macos-x86_64:
     - .optional-release
     - .optional-release
 
-  tags: ["veloren/*:macos", "build"]
+  tags: ["hobania/*:macos", "build"]
 
 opt-macos-aarch64:
   extends:
     - .tmacos-aarch64
     - .optional-release
-  tags: ["veloren/*:macos", "build"]
+  tags: ["hobania/*:macos", "build"]

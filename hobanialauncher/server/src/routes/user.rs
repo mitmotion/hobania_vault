@@ -4,9 +4,9 @@ use rocket::*;
 pub fn index() -> rocket::response::content::RawHtml<&'static str> {
     rocket::response::content::RawHtml(
         r#"<html>
-<h1>Veloren Airshipper Download Server</h1>
+<h1>Hobania Hobanialauncher Download Server</h1>
 
-You can find the <a href="https://veloren.net/download">airshipper client here</a><br>
+You can find the <a href="https://hobania.mitmotion.co.za/download">hobanialauncher client here</a><br>
 
 Check for supported channels via /channels/&lt;os&gt;/&lt;arch&gt; :<br>
 <ul>

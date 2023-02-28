@@ -1,5 +1,5 @@
-# Publishes veloren-server-cli to the gitlab container registry
-# https://gitlab.com/veloren/veloren/container_registry
+# Publishes hobania-server-cli to the gitlab container registry
+# https://gitlab.com/hobania/hobania/container_registry
 .publish:
   stage: publish
   rules:
@@ -19,7 +19,7 @@ docker:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  tags: ["veloren/*", "publish", "trusted"]
+  tags: ["hobania/*", "publish", "trusted"]
   dependencies:
     - linux
   before_script:
@@ -33,8 +33,8 @@ docker:
 
 pages:
   extends: .publish
-  image: registry.gitlab.com/veloren/veloren-docker-ci/cache/quality:${CACHE_IMAGE_TAG}
-  tags: ["veloren/*", "publish"]
+  image: registry.gitlab.com/hobania/hobania-docker-ci/cache/quality:${CACHE_IMAGE_TAG}
+  tags: ["hobania/*", "publish"]
   artifacts:
     paths:
       - public

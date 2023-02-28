@@ -97,8 +97,8 @@ impl Default for Config {
             gitlab_secret: "secret".to_owned(),
             github_release_config: Some(GithubReleaseConfig {
                 github_token: "token".to_owned(),
-                github_repository_owner: "veloren".to_owned(),
-                github_repository: "veloren".to_owned(),
+                github_repository_owner: "hobania".to_owned(),
+                github_repository: "hobania".to_owned(),
                 github_release: "test".to_owned(),
             }),
             channel_filters: vec![AndFilter(vec![

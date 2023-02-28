@@ -13,6 +13,6 @@
 
 # Updating Appstream Metadata
 
-In `client/assets/net.veloren.airshipper.metainfo`:
+In `client/assets/net.hobania.hobanialauncher.metainfo`:
 1. Add new release, with `version` and `date`, and optionally add a `description` for the release.
 2. Update screenshots sources.

@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Clone Gitlab repo
         run: git lfs install;
-          git clone https://gitlab.com/veloren/airshipper.git;
+          git clone https://gitlab.com/hobanialauncher/hobanialauncher.git;
 
       - name: Uninstall LFS
-        run: cd airshipper;
+        run: cd hobanialauncher;
           git lfs uninstall;
           git lfs migrate export --include="*" --everything;
 
@@ -26,4 +26,4 @@ jobs:
           branch: master
           force: true
           tags: true
-          directory: airshipper
+          directory: hobanialauncher

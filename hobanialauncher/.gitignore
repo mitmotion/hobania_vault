@@ -14,7 +14,7 @@ target/
 # IDE
 .idea
 
-airshipper.ron
+hobanialauncher.ron
 *.db
 .env
 *.log

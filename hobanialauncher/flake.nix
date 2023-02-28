@@ -16,7 +16,7 @@
     ncl = inputs.nci.lib.nci-lib;
 
     cleanedSrc = builtins.path {
-      name = "airshipper-source";
+      name = "hobanialauncher-source";
       path = toString ./.;
       filter = path: type:
         lib.all
@@ -45,23 +45,23 @@
     in
       pkgs.writeShellScript "patch" ''
         echo "making binaries executable"
-        chmod +x {veloren-voxygen,veloren-server-cli}
+        chmod +x {hobania-voxygen,hobania-server-cli}
         echo "patching dynamic linkers"
         ${pkgs.patchelf}/bin/patchelf \
           --set-interpreter "${pkgs.stdenv.cc.bintools.dynamicLinker}" \
-          veloren-server-cli
+          hobania-server-cli
         ${pkgs.patchelf}/bin/patchelf \
           --set-interpreter "${pkgs.stdenv.cc.bintools.dynamicLinker}" \
           --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
-          veloren-voxygen
+          hobania-voxygen
       '';
   in
     inputs.nci.lib.makeOutputs {
       root = ./.;
       config = common: {
         outputs.defaults = {
-          app = "airshipper";
-          package = "airshipper";
+          app = "hobanialauncher";
+          package = "hobanialauncher";
         };
         runtimeLibs = [
           "vulkan-loader"
@@ -81,17 +81,17 @@
           nativeBuildInputs = ncl.addNativeBuildInputs prev [pkgs.pkg-config];
         };
       in {
-        airshipper.overrides = {
+        hobanialauncher.overrides = {
           cleaned-src = {src = cleanedSrc;};
         };
-        airshipper-server.depsOverrides = {
+        hobanialauncher-server.depsOverrides = {
           add-openssl.overrideAttrs = addOpenssl;
         };
-        airshipper-server.overrides = {
+        hobanialauncher-server.overrides = {
           add-openssl.overrideAttrs = addOpenssl;
           cleaned-src = {src = cleanedSrc;};
         };
-        airshipper.wrapper = _: old: let
+        hobanialauncher.wrapper = _: old: let
           patcher = makePatcher pkgs;
         in
           common.internal.pkgsSet.utils.wrapDerivation old

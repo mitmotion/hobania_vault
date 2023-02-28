@@ -1,10 +1,10 @@
 version: "3.1"
 
 services:
-  airshipper:
-    container_name: Airshipper
+  hobanialauncher:
+    container_name: Hobanialauncher
     restart: always
-    image: registry.gitlab.com/veloren/airshipper/server:master
+    image: registry.gitlab.com/hobania/hobanialauncher/server:master
     volumes:
       - "./data:/opt/app/data"
       - "./config:/opt/app/config"

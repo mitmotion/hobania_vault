@@ -4,19 +4,19 @@ This page lists common issues and solutions which might work.
 
 # Logs
 
-You can aquire the logs by either running via the terminal (`airshipper -h` to view logging options) or find `airshipper.log` at: 
+You can aquire the logs by either running via the terminal (`hobanialauncher -h` to view logging options) or find `hobanialauncher.log` at: 
 |   OS    |                    Path                    |
 | :-----: | :----------------------------------------: |
-| Windows |           `%appdata%/airshipper`           |
-|  Linux  |        `~/.local/share/airshipper`         |
-|  MacOS  | `~/Library/Application Support/airshipper` |
+| Windows |           `%appdata%/hobanialauncher`           |
+|  Linux  |        `~/.local/share/hobanialauncher`         |
+|  MacOS  | `~/Library/Application Support/hobanialauncher` |
 
 ## Graphical issues
 
-**Note**: In General incase airshipper does not open or display correct you can use the cli (or use compatibility desktop shortcut on windows) by
+**Note**: In General incase hobanialauncher does not open or display correct you can use the cli (or use compatibility desktop shortcut on windows) by
 1. Opening a terminal
    > On Windows press `Windows key + R`. Then type `cmd` and hit `enter`. 
-2. Type `airshipper run` and hit enter
+2. Type `hobanialauncher run` and hit enter
 3. Enjoy the game.
 
 #### Known graphical issues
