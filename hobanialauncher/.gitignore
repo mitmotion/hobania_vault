@@ -1,0 +1,22 @@
+# Rust
+target/
+**/*.rs.bk
+
+# Nix
+/result*
+
+# Direnv
+/.direnv
+/.envrc
+/config/config.ron
+/config/config.template.ron
+
+# IDE
+.idea
+
+airshipper.ron
+*.db
+.env
+*.log
+data/
+/.vscode

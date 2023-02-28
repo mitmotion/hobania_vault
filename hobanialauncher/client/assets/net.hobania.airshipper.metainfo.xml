@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="desktop-application">
+  <id>co.za.mitmotion.hobania.hobanialauncher</id>
+  
+  <name>Hobania Launcher v0.1a</name>
+  <summary>Airshipper is the launcher engine for Hobania.</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">moderate</content_attribute>
+    <content_attribute id="violence-fantasy">moderate</content_attribute>
+    <content_attribute id="language-profanity">mild</content_attribute>
+    <content_attribute id="language-humor">mild</content_attribute>
+    <content_attribute id="social-chat">moderate</content_attribute>
+  </content_rating>
+
+  <releases>
+    <release version="0.10.0" date="2022-11-29"/>
+  </releases>
+  
+  <description>
+    <p>
+      Airshipper is the official launcher for Hobania, the online voxel-based RPG.
+    </p>
+    <p>
+      Hobania is a multiplayer open world, voxel-based RPG written in Rust. It is inspired
+      by games such as Cube World, Minecraft, Dwarf Fortress and Breath of the Wild.
+    </p>
+    <p>
+      Hobania's development mainly happens pravatly.
+      New contributors are always welcome!
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">co.za.mitmotion.hobania.hobanialauncher.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://imagizer.imageshack.com/img922/4712/o0HREU.gif</image>
+    </screenshot>
+    <screenshot>
+      <image>https://imagizer.imageshack.com/img922/9172/VH3KoF.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://Hobania.net/screenshot3.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://Hobania.net/screenshot4.png</image>
+    </screenshot>
+  </screenshots>
+
+  <keywords>
+    <keyword>multiplayer</keyword>
+    <keyword>Hobania</keyword>
+  </keywords>
+
+
+  <url type="bugtracker">https://gitlab.com/Hobania/Hobania/issues</url>
+  <url type="faq">https://gitlab.com/Hobania/Hobania#faq</url>
+  <url type="help">https://book.hobania.mitmotion.co.za</url>
+  <url type="homepage">https://hobania.mitmotion.co.za</url>
+
+
+</component>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Hobania_Launcher_v0.1a
+Comment=Official launcher for Hobania - the open-world, multiplayer voxel RPG
+Exec=hobania_launcher
+Categories=Game
+Keywords=hobania, hobanialauncher
+Icon=net.hobania.hobanialauncher
+Terminal=false

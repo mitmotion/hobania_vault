@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<!--
+  Copyright (C) 2017 Christopher R. Field.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--
+  Please do not remove these pre-processor If-Else blocks. These are used with
+  the `cargo wix` subcommand to automatically determine the installation
+  destination for 32-bit versus 64-bit installers. Removal of these lines will
+  cause installation errors.
+-->
+<?if $(var.Platform) = x64 ?>
+    <?define Win64 = "yes" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?else ?>
+  <?define Win64 = "no" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+<?endif ?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Product Id='*' Name='HobaniaLauncher' UpgradeCode='1715788C-2FC7-44D7-912D-2B46202C2FD9' Manufacturer='HobaniaLauncher contributors' Language='1033' Codepage='1252' Version='$(var.Version)'>
+    <Package Id='*' Keywords='Installer' Description='Provides automatic updates for the voxel RPG Hobania.' Manufacturer='HobaniaLauncher contributors' InstallerVersion='450' Languages='1033' Compressed='yes' InstallScope='perMachine' SummaryCodepage='1252' Platform='$(var.Platform)'/>
+
+    <MajorUpgrade Schedule='afterInstallInitialize' DowngradeErrorMessage='A newer version of [ProductName] is already installed. Setup will now exit.'/>
+
+    <Property Id="APPLICATIONFOLDER" Secure="yes">
+      <RegistrySearch Id="FindInstallLocation"
+          Root="HKCU"
+          Key="Software\HobaniaLauncher"
+          Name="InstallationPath"
+          Type="raw"
+          Win64="$(var.Win64)" />
+    </Property>
+
+    <Media Id='1' Cabinet='media1.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1'/>
+    <Property Id='DiskPrompt' Value='HobaniaLauncher Installation'/>
+    <Property Id="START_VIA_REGISTRY">1</Property>
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="HobaniaLauncher">
+          <!-- Create shortcut to start HobaniaLauncher from taskbar search -->
+          <Component Id='ApplicationShortcut' Guid='{E2CD5A52-9B7C-410F-8C85-0D834C435A43}' Win64='$(var.Win64)'>
+            <Shortcut Id='ApplicationStartMenuShortcut' Name='HobaniaLauncher' Description='HobaniaLauncher' Target='[!hobanialauncher.exe]' WorkingDirectory='APPLICATIONFOLDER' />
+            <Shortcut Id='ApplicationStartMenuCompatibilityShortcut' Name='HobaniaLauncher (compatibility mode)' Description="Will update and start Hobania on all kinds of hardware even if HobaniaLauncher itself wouldn't be supported." Target="[!hobanialauncher.exe]" Arguments="run" WorkingDirectory="APPLICATIONFOLDER" />
+            <RemoveFolder Id='CleanUpShortCut' Directory='ApplicationProgramsFolder' On='uninstall'/>
+            <RegistryValue Root='HKCU' Key='Software\HobaniaLauncher' Name='installed' Type='integer' Value='1' KeyPath='yes'/>
+            <!-- make upgrading easier by remembering where it was installed -->
+            <RegistryValue Root='HKCU' Key='Software\HobaniaLauncher' Name='InstallationPath' Type='string' Value='[APPLICATIONFOLDER]' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id='$(var.PlatformProgramFilesFolder)' Name='PFiles'>
+        <Directory Id='APPLICATIONFOLDER' Name='HobaniaLauncher'>
+          <!-- HobaniaLauncher itself -->
+          <Component Id='hobanialauncher.exe' Guid='{dd1e4a01-ff62-4d96-a9ce-a5d7d7548fad}' Win64='$(var.Win64)'>
+            <File Id='hobanialauncher.exe' Name='hobanialauncher.exe' DiskId='1' Source='target\release\hobanialauncher.exe' KeyPath='yes'/>
+          </Component>
+          <!-- Add to PATH for easier access over terminal -->
+          <Component Id='Path' Guid='4a62682d-9dfd-4203-ad35-1e4300ad6a5a' Win64='$(var.Win64)' KeyPath='yes'>
+            <Environment Id='PATH' Name='PATH' Value='[APPLICATIONFOLDER]' Permanent='no' Part='last' Action='set' System='yes'/>
+          </Component>
+        </Directory>
+      </Directory>
+      
+      <Directory Id="DesktopFolder" Name="Desktop">
+          <!-- Create shortcut to start HobaniaLauncher from the desktop -->
+          <Component Id="ApplicationShortcutDesktop" Guid="c2601e65-edf8-4f5a-94ff-0b3e800fe375">
+              <Shortcut Id="ApplicationDesktopShortcut" Name="HobaniaLauncher" Description="Provides automatic updates for the voxel RPG Hobania." Target="[!hobanialauncher.exe]" WorkingDirectory='APPLICATIONFOLDER'/>
+              <RemoveFolder Id="CleanUpDesktopShortcut" On="uninstall"/>
+              <RegistryValue Root="HKCU" Key="Software\HobaniaLauncher" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes"/>
+          </Component>
+          <!-- Create compatibility shortcut to start HobaniaLauncher from the desktop -->
+          <Component Id="ApplicationShortcutCompatibilityDesktop" Guid="7b3e27ba-0fd5-4dfb-9be3-9614ec25fd9a">
+              <Shortcut Id="ApplicationDesktopCompatibilityShortcut" Name="HobaniaLauncher (compatibility mode)" Description="Will update and start Hobania on all kinds of hardware even if HobaniaLauncher itself wouldn't be supported." Target="[!hobanialauncher.exe]" Arguments="run" WorkingDirectory='APPLICATIONFOLDER'/>
+              <RemoveFolder Id="CleanUpDesktopCompatibilityShortcut" On="uninstall"/>
+              <RegistryValue Root="HKCU" Key="Software\HobaniaLauncher" Name="DesktopCompatibilityShortcut" Type="integer" Value="1" KeyPath="yes"/>
+          </Component>
+      </Directory>
+    </Directory>
+    
+    <!-- Main feature installs HobaniaLauncher and shortcut -->
+    <Feature Id='MainProgram' Title='HobaniaLauncher' Description='Installs HobaniaLauncher.' Level='1' ConfigurableDirectory='APPLICATIONFOLDER' AllowAdvertise='no' Display='expand' Absent='disallow'>
+      <ComponentRef Id='hobanialauncher.exe'/>
+      <ComponentRef Id='ApplicationShortcut'/>
+      
+      <!-- If choosen add to PATH for easier access over terminal -->
+      <Feature Id='Environment' Title='PATH Environment Variable' Description='Add the install location of the [ProductName] executable to the PATH system environment variable. This allows the [ProductName] executable to be called from any location.' Level='1' Absent='allow'>
+        <ComponentRef Id='Path'/>
+      </Feature>
+      <!-- If choosen create a desktop shortcut -->
+      <Feature Id='DesktopShortcut' Title='Add a Desktop shortcut' Description='Creates a shortcut on your desktop for easier access.' Level='1' Absent='allow'>
+        <ComponentRef Id='ApplicationShortcutDesktop'/>
+        <ComponentRef Id='ApplicationShortcutCompatibilityDesktop'/>
+      </Feature>
+    </Feature>
+
+    <SetProperty Id='ARPINSTALLLOCATION' Value='[APPLICATIONFOLDER]' After='CostFinalize'/>
+    
+    <!-- set product icon -->
+    <Icon Id='ProductICO' SourceFile='client/wix/hobania.ico'/>
+    <Property Id='ARPPRODUCTICON' Value='ProductICO' />
+    <Property Id='ARPHELPLINK' Value='hobania.mitmotion.co.za'/>
+	
+	  <!-- Use this property with silent install to start hobanialauncher -->
+	  <Property Id="AUTOSTART" Value ="0" />
+
+    <!-- Customize UI -->
+    <UI>
+      <!-- Skip license Dialog via customized FeatureTree UI -->
+      <UIRef Id='WixUI_FeatureTreeNoLicense'/>
+      <!-- Allow to start HobaniaLauncher after install -->
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+      <UIRef Id="WixUI_Common" />
+    </UI>
+    
+    <WixVariable Id='WixUIExclamationIco' Value='client/wix/hobania.ico'/>
+    <WixVariable Id='WixUIDialogBmp' Value='client/wix/Dialog.bmp'/>
+    <WixVariable Id='WixUIBannerBmp' Value='client/wix/Banner.bmp'/>
+    <WixVariable Id='WixUIInfoIco' Value='client/wix/hobania.ico'/>
+	
+	  <!-- Start hobanialauncher incase it was a slient update -->
+	  <InstallExecuteSequence>
+     <Custom Action='LaunchApplication' After='InstallFinalize'>AUTOSTART = 1</Custom>
+    </InstallExecuteSequence>
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch HobaniaLauncher" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <Property Id="WixShellExecTarget" Value="[#hobanialauncher.exe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+  </Product>
+</Wix>
