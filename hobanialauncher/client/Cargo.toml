@@ -1,11 +1,11 @@
 [package]
 name = "hobania_launcher"
 description = "Provides automatic updates for the voxel RPG Hobania."
-version = "0.1.a"
+version = "0.1.0"
 authors = ["Ceo_Hobo <mitmotionmedia@outlook.com>"]
-edition = "2023"
+edition = "2021"
 publish = false
-default-run = "hobania_launch"
+default-run = "hobania_launcher"
 
 license = "GPL-3.0"
 homepage = "https://hobania.mitmotion.co.za"

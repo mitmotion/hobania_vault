@@ -1,8 +1,8 @@
 [package]
 name = "hobanialauncher-server"
-version = "0.10.0"
+version = "0.1.0"
 authors = ["Ceo_Hobo<ceo_hobo@mitmotion.co.za>"]
-edition = "2023"
+edition = "2021"
 publish = false
 
 [package.metadata.nix]
