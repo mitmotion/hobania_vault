@@ -1,5 +1,5 @@
 [package]
-name = "hobanialauncher-server"
+name = "hobania-server"
 version = "0.1.0"
 authors = ["Ceo_Hobo<ceo_hobo@mitmotion.co.za>"]
 edition = "2021"
